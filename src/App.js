@@ -1,9 +1,19 @@
 import './App.css';
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {getExpenses} from "./api";
 
 function App() {
   const [currentExp, setCurrentExp] = useState({date: "", value: ""});
   const [expenses, setExpenses] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const exp = await getExpenses();
+      console.log(typeof exp);
+      setExpenses(exp);
+    })();
+  }, []);
+
   const dateChangeHandler = (evt) => {
     setCurrentExp({...currentExp, date: evt.target.value});
   };
@@ -34,9 +44,11 @@ function App() {
           <table>
             <tbody>
               {expenses.map((it, index) => {
+                console.log(it, index);
+                console.log(new Date(it.date.seconds * 1000).toLocaleDateString("en-US"));
                 return (
                   <tr key={index}>
-                    <td>{it.date}</td>
+                    <td>{new Date(it.date.seconds * 1000).toLocaleDateString("en-US")}</td>
                     <td>{it.value}</td>
                   </tr>
                 );
