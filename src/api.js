@@ -3,6 +3,8 @@ import {
   collection,
   getDocs,
   getFirestore,
+  addDoc,
+  Timestamp
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -24,6 +26,7 @@ export const initializeAPI = () => {
 export const getExpenses = async () => {
   const db = getFirestore();
   const expenses = [];
+  // console.log(1, Timestamp.fromDate(new Date()));
 
   try {
     const querySnapshot = await getDocs(collection(db, "expensesCollection"));
@@ -38,3 +41,15 @@ export const getExpenses = async () => {
 
   return expenses;
 }
+
+export const createExpense = async (data) => {
+  const db = getFirestore();
+  const stamp = Timestamp.fromDate(new Date(data.date));
+
+  data = {...data, date: stamp};
+  try {
+    await addDoc(collection(db, "expensesCollection"), data);
+  } catch(error) {
+    return Promise.reject(error);
+  }
+};

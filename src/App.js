@@ -1,6 +1,6 @@
 import './App.css';
 import {useEffect, useState} from "react";
-import {getExpenses} from "./api";
+import {getExpenses, createExpense} from "./api";
 
 function App() {
   const [currentExp, setCurrentExp] = useState({date: "", value: ""});
@@ -9,7 +9,6 @@ function App() {
   useEffect(() => {
     (async () => {
       const exp = await getExpenses();
-      console.log(typeof exp);
       setExpenses(exp);
     })();
   }, []);
@@ -22,11 +21,9 @@ function App() {
   };
   const formSubmitHandler = (evt) => {
     evt.preventDefault();
-    console.log(currentExp);
-    setExpenses((initial) => [...initial, currentExp]);
-    setCurrentExp({date: "", value: ""});
-    console.log(currentExp);
-    console.log(expenses);
+    createExpense(currentExp).then(() => {
+      setCurrentExp({date: "", value: ""})
+    });
   };
 
   return (
@@ -44,8 +41,6 @@ function App() {
           <table>
             <tbody>
               {expenses.map((it, index) => {
-                console.log(it, index);
-                console.log(new Date(it.date.seconds * 1000).toLocaleDateString("en-US"));
                 return (
                   <tr key={index}>
                     <td>{new Date(it.date.seconds * 1000).toLocaleDateString("en-US")}</td>
