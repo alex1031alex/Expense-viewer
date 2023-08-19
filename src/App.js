@@ -1,6 +1,7 @@
 import './App.css';
 import {useEffect, useState} from "react";
 import {getExpenses, createExpense} from "./api";
+import {fromTimestampToLocalDate} from "./utils";
 
 function App() {
   const [currentExp, setCurrentExp] = useState({date: "", value: ""});
@@ -9,6 +10,7 @@ function App() {
   useEffect(() => {
     (async () => {
       const exp = await getExpenses();
+      exp.sort((a, b) => a.date.seconds - b.date.seconds);
       setExpenses(exp);
     })();
   }, []);
@@ -40,10 +42,20 @@ function App() {
         <div>
           <table>
             <tbody>
-              {expenses.map((it, index) => {
+              {expenses.map((it, index, arr) => {
+                const localDate = fromTimestampToLocalDate(it.date);
+                if (index === 0 || localDate !== fromTimestampToLocalDate(arr[index-1].date)) {
+                  return (
+                    <tr key={index}>
+                      <td>{localDate}</td>
+                      <td>{Number(it.value).toFixed(2)}</td>
+                    </tr>
+                  );
+                }
+
                 return (
                   <tr key={index}>
-                    <td>{new Date(it.date.seconds * 1000).toLocaleDateString("en-US")}</td>
+                    <td />
                     <td>{it.value}</td>
                   </tr>
                 );

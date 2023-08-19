@@ -6,6 +6,7 @@ import {
   addDoc,
   Timestamp
 } from "firebase/firestore";
+import {fromStringToTimestamp} from "./utils";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCV73OAQv7JdDlUtJRqMLj1sJGIDV6dlUU",
@@ -26,7 +27,6 @@ export const initializeAPI = () => {
 export const getExpenses = async () => {
   const db = getFirestore();
   const expenses = [];
-  // console.log(1, Timestamp.fromDate(new Date()));
 
   try {
     const querySnapshot = await getDocs(collection(db, "expensesCollection"));
@@ -44,7 +44,7 @@ export const getExpenses = async () => {
 
 export const createExpense = async (data) => {
   const db = getFirestore();
-  const stamp = Timestamp.fromDate(new Date(data.date));
+  const stamp = fromStringToTimestamp(data.date);
 
   data = {...data, date: stamp};
   try {
