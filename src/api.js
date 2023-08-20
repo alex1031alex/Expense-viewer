@@ -1,13 +1,15 @@
 import { initializeApp } from "firebase/app";
 import {
   collection,
+  doc,
   getDocs,
   getFirestore,
   addDoc,
-  Timestamp
+  deleteDoc
 } from "firebase/firestore";
 import {fromStringToTimestamp} from "./utils";
 
+const COLLECTION_NAME = "expensesCollection";
 const firebaseConfig = {
   apiKey: "AIzaSyCV73OAQv7JdDlUtJRqMLj1sJGIDV6dlUU",
   authDomain: "expense-view-7d01d.firebaseapp.com",
@@ -29,11 +31,11 @@ export const getExpenses = async () => {
   const expenses = [];
 
   try {
-    const querySnapshot = await getDocs(collection(db, "expensesCollection"));
+    const querySnapshot = await getDocs(collection(db, COLLECTION_NAME));
 
     querySnapshot.forEach((doc) => {
       const data = doc.data();
-      expenses.push(data);
+      expenses.push({id: doc.id, ...data});
     })
   } catch (error) {
     return Promise.reject(error);
@@ -48,8 +50,20 @@ export const createExpense = async (data) => {
 
   data = {...data, date: stamp};
   try {
-    await addDoc(collection(db, "expensesCollection"), data);
+    await addDoc(collection(db, COLLECTION_NAME), data);
   } catch(error) {
     return Promise.reject(error);
   }
+};
+
+export const deleteEntry = async (id) => {
+  const db = getFirestore();
+  const ref = doc(db, COLLECTION_NAME, id);
+
+  try {
+    await deleteDoc(ref);
+  } catch (error) {
+    return Promise.reject(error);
+  }
+
 };

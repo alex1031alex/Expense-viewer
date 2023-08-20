@@ -12,7 +12,7 @@ export const fromStringToTimestamp = (str) => {
 
 export const fromTimestampToLocalDate = (timestamp) => {
   if (timestamp instanceof Timestamp) {
-    return new Date(timestamp.seconds * 1000).toLocaleDateString("en-US");
+    return new Date(timestamp.seconds * 1000).toLocaleDateString("en-US", {day: "2-digit",month: "long", year: "numeric"});
   }
 
   throw Error("Incorrect data. This is not an instance of Timestamp class");
