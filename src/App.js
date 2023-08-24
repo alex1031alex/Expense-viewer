@@ -6,14 +6,24 @@ import cross from "./icons/cross.svg";
 import {deleteEntry} from "./api";
 
 function App() {
-  const [currentExp, setCurrentExp] = useState({date: "", value: ""});
+  const [currentExp, setCurrentExp] = useState({date: "", value: "", isIncome: false});
   const [expenses, setExpenses] = useState([]);
 
   useEffect(() => {
     (async () => {
       const exp = await getExpenses();
-      exp.sort((a, b) => a.date.seconds - b.date.seconds);
-      setExpenses(exp);
+      const sortedExp = exp.slice().sort((a, b) => {
+        if (a.date.seconds === b.date.seconds && a.isIncome === true && b.isIncome === false) {
+          return -1;
+        }
+
+        if (a.date.seconds === b.date.seconds && a.isIncome === false && b.isIncome === true) {
+          return 1;
+        }
+
+        return a.date.seconds - b.date.seconds;
+      });
+      setExpenses(sortedExp);
     })();
   }, []);
 
@@ -28,9 +38,11 @@ function App() {
     deleteEntry(id).then(() => {});
   };
   const formSubmitHandler = (evt) => {
+    console.log(evt.currentTarget.dataset);
     evt.preventDefault();
-    createExpense(currentExp).then(() => {
-      setCurrentExp({date: "", value: ""})
+    console.log(evt.currentTarget.dataset.isIncome === "true");
+    createExpense({...currentExp, isIncome: evt.currentTarget.dataset.isIncome === "true"}).then(() => {
+      setCurrentExp({...currentExp, date: "", value: "", isIncome: false})
     });
   };
 
@@ -43,7 +55,8 @@ function App() {
         <form className="form main__form">
           <input type="date" onChange={dateChangeHandler} value={currentExp.date} />
           <input type="number" onChange={expValueChangeHandler} value={currentExp.value} />
-          <input type="submit" onClick={formSubmitHandler} value="Добавить запись" />
+          <input type="submit" onClick={formSubmitHandler} value="Приход" data-is-income="true" />
+          <input type="submit" onClick={formSubmitHandler} value="Расход" data-is-income="false" />
         </form>
         <div>
           <table className="table">
@@ -62,8 +75,8 @@ function App() {
                   return (
                     <tr key={index}>
                       <td className="table__col table__col--1">{localDate}</td>
-                      <td className="table__col table__col--2" />
-                      <td className="table__col table__col--3">{Number(it.value).toFixed(2)}</td>
+                      <td className="table__col table__col--2">{it.isIncome && Number(it.value).toFixed(2)}</td>
+                      <td className="table__col table__col--3">{!it.isIncome && Number(it.value).toFixed(2)}</td>
                       <td className="table__col table__col--4"><button id={it.id} type="button" className="button button--del" onClick={delButtonClickHandler}><img alt="Удалить запись" src={cross} /></button></td>
                     </tr>
                   );
@@ -72,8 +85,8 @@ function App() {
                 return (
                   <tr key={index}>
                     <td className="table__col table__col--1" />
-                    <td className="table__col table__col--2" />
-                    <td className="table__col table__col--3">{it.value}</td>
+                    <td className="table__col table__col--2" >{it.isIncome && Number(it.value).toFixed(2)}</td>
+                    <td className="table__col table__col--3">{!it.isIncome && Number(it.value).toFixed(2)}</td>
                     <td className="table__col table__col--4"><button id={it.id} type="button" className="button button--del" onClick={delButtonClickHandler}><img alt="Удалить запись" src={cross} /></button></td>
                   </tr>
                 );

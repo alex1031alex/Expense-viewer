@@ -23,6 +23,10 @@ button {
     padding: 0 var(--container-padding);
 }
 
+.app__header {
+    margin-bottom: 15px;
+}
+
 .main__form {
     margin-bottom: 24px;
 }
