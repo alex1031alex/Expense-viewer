@@ -26,7 +26,7 @@ export const initializeAPI = () => {
   return app;
 };
 
-export const getExpenses = async () => {
+export const fetchRecords = async () => {
   const db = getFirestore();
   const expenses = [];
 
@@ -44,7 +44,7 @@ export const getExpenses = async () => {
   return expenses;
 }
 
-export const createExpense = async (data) => {
+export const addRecord = async data => {
   const db = getFirestore();
   const stamp = fromStringToTimestamp(data.date);
 
@@ -56,7 +56,7 @@ export const createExpense = async (data) => {
   }
 };
 
-export const deleteEntry = async (id) => {
+export const deleteRecord = async id => {
   const db = getFirestore();
   const ref = doc(db, COLLECTION_NAME, id);
 
@@ -65,5 +65,4 @@ export const deleteEntry = async (id) => {
   } catch (error) {
     return Promise.reject(error);
   }
-
 };

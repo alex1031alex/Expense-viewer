@@ -1,17 +1,17 @@
 import './App.css';
 import {useEffect, useState} from "react";
-import {getExpenses, createExpense} from "./api";
+import {fetchRecords, addRecord} from "./api";
 import {fromTimestampToLocalDate} from "./utils";
 import cross from "./icons/cross.svg";
-import {deleteEntry} from "./api";
+import {deleteRecord} from "./api";
 
 function App() {
-  const [currentExp, setCurrentExp] = useState({date: "", value: "", isIncome: false});
-  const [expenses, setExpenses] = useState([]);
+  const [currentRecord, setCurrentRecord] = useState({date: "", value: "", isIncome: false});
+  const [records, setRecords] = useState([]);
 
   useEffect(() => {
     (async () => {
-      const exp = await getExpenses();
+      const exp = await fetchRecords();
       const sortedExp = exp.slice().sort((a, b) => {
         if (a.date.seconds === b.date.seconds && a.isIncome === true && b.isIncome === false) {
           return -1;
@@ -23,26 +23,27 @@ function App() {
 
         return a.date.seconds - b.date.seconds;
       });
-      setExpenses(sortedExp);
+      setRecords(sortedExp);
     })();
   }, []);
 
   const dateChangeHandler = (evt) => {
-    setCurrentExp({...currentExp, date: evt.target.value});
+    setCurrentRecord({...currentRecord, date: evt.target.value});
   };
   const expValueChangeHandler = (evt) => {
-    setCurrentExp({...currentExp, value: evt.target.value});
+    setCurrentRecord({...currentRecord, value: evt.target.value});
   };
   const delButtonClickHandler = (evt) => {
     const id = evt.currentTarget.id;
-    deleteEntry(id).then(() => {});
+    deleteRecord(id).then(() => {});
   };
   const formSubmitHandler = (evt) => {
-    console.log(evt.currentTarget.dataset);
     evt.preventDefault();
-    console.log(evt.currentTarget.dataset.isIncome === "true");
-    createExpense({...currentExp, isIncome: evt.currentTarget.dataset.isIncome === "true"}).then(() => {
-      setCurrentExp({...currentExp, date: "", value: "", isIncome: false})
+    addRecord({
+      ...currentRecord,
+      isIncome: evt.currentTarget.dataset.isIncome === "true"
+    }).then(() => {
+      setCurrentRecord({...currentRecord, date: "", value: "", isIncome: false})
     });
   };
 
@@ -53,8 +54,8 @@ function App() {
       </header>
       <main className="app__main main">
         <form className="form main__form">
-          <input type="date" onChange={dateChangeHandler} value={currentExp.date} />
-          <input type="number" onChange={expValueChangeHandler} value={currentExp.value} />
+          <input type="date" onChange={dateChangeHandler} value={currentRecord.date} />
+          <input type="number" onChange={expValueChangeHandler} value={currentRecord.value} />
           <input type="submit" onClick={formSubmitHandler} value="Приход" data-is-income="true" />
           <input type="submit" onClick={formSubmitHandler} value="Расход" data-is-income="false" />
         </form>
@@ -69,7 +70,7 @@ function App() {
               </tr>
             </thead>
             <tbody>
-              {expenses.map((it, index, arr) => {
+              {records.map((it, index, arr) => {
                 const localDate = fromTimestampToLocalDate(it.date);
                 if (index === 0 || localDate !== fromTimestampToLocalDate(arr[index-1].date)) {
                   return (
