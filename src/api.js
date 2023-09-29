@@ -28,20 +28,20 @@ export const initializeAPI = () => {
 
 export const fetchRecords = async () => {
   const db = getFirestore();
-  const expenses = [];
+  const records = [];
 
   try {
     const querySnapshot = await getDocs(collection(db, COLLECTION_NAME));
 
     querySnapshot.forEach((doc) => {
       const data = doc.data();
-      expenses.push({id: doc.id, ...data});
+      records.push({...data, id: doc.id});
     })
   } catch (error) {
     return Promise.reject(error);
   }
 
-  return expenses;
+  return records;
 }
 
 export const addRecord = async data => {
@@ -50,7 +50,8 @@ export const addRecord = async data => {
 
   data = {...data, date: stamp};
   try {
-    await addDoc(collection(db, COLLECTION_NAME), data);
+    const docRef = await addDoc(collection(db, COLLECTION_NAME), data);
+    return docRef.id;
   } catch(error) {
     return Promise.reject(error);
   }
@@ -63,6 +64,7 @@ export const deleteRecord = async id => {
   try {
     await deleteDoc(ref);
   } catch (error) {
+    console.log("Ошибка удаления");
     return Promise.reject(error);
   }
 };

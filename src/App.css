@@ -59,3 +59,9 @@ button {
 .button--del:active {
     background-color: #aa5588;
 }
+
+.footer {
+    min-height: 80px;
+    margin-top: 20px;
+    background-color: darkslateblue;
+}
