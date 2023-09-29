@@ -42,6 +42,12 @@ button {
     text-align: justify;
 }
 
+.table__footer {
+    font-size: 20px;
+    font-weight: 700;
+    background-color: bisque;
+}
+
 .button {
     cursor: pointer;
 }

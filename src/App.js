@@ -10,6 +10,7 @@ const INITIAL_RECORD = {date: "", value: 0, isIncome: false, category: "other", 
 function App() {
   const [currentRecord, setCurrentRecord] = useState(INITIAL_RECORD);
   const [records, setRecords] = useState([]);
+  const [total, setTotal] = useState({income: 0, expense: 0});
 
   const inputRef = useRef(null);
   const dateInputRef = useRef(null);
@@ -18,8 +19,29 @@ function App() {
     (async () => {
       const fetchedRecords = await fetchRecords();
       setRecords(fetchedRecords);
+
     })();
   }, []);
+
+  useEffect(() => {
+    const totalIncome = records.reduce((acc, it) => {
+      if (it.isIncome) {
+        return acc + Number(it.value);
+      }
+
+      return acc;
+    }, 0);
+
+    const totalExpense = records.reduce((acc, it) => {
+      if (it.isIncome) {
+        return acc;
+      }
+
+      return acc + Number(it.value);
+    }, 0);
+
+    setTotal({...total, income: +totalIncome.toFixed(2), expense: +totalExpense.toFixed(2)})
+  }, [records]);
 
   const dateChangeHandler = (evt) => {
     setCurrentRecord({...currentRecord, date: evt.target.value});
@@ -79,6 +101,14 @@ function App() {
                   <th className="table__col table__col--4">Удалить запись</th>
                 </tr>
               </thead>
+              <tfoot className="table__footer">
+                <tr>
+                  <td className="table__col table__col--1">Total</td>
+                  <td className="table__col table__col--2">{total.income}</td>
+                  <td className="table__col table__col--3">{total.expense}</td>
+                  <td className="table__col table__col--4"/>
+                </tr>
+              </tfoot>
               <tbody>
                 {sortRecordsByDate(records).map((it, index, arr) => {
                   const localDate = fromTimestampToLocalDate(it.date);
