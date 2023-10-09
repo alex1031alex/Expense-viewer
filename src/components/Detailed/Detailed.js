@@ -1,18 +1,12 @@
 import "./Detailed.css";
 import {useState} from "react";
 import {fromTimestampToLocalDate, sortRecordsByDate, getTotal} from "../../utils";
-import cross from "../../icons/cross.svg";
 import angleArrow from "../../icons/angle-arrow.svg";
 import classNames from "classnames";
+import {DeleteButton} from "../Delete-button/Delete-button";
 
 export const Detailed = ({records, deleteRecord}) => {
   const [isShown, setIsShown] = useState(false);
-
-  const delButtonClickHandler = (evt) => {
-    evt.preventDefault();
-    const id = evt.currentTarget.id;
-    deleteRecord(id);
-  };
 
   const hideButtonClickHandler = () => {
     setIsShown(!isShown);
@@ -51,7 +45,7 @@ export const Detailed = ({records, deleteRecord}) => {
               <td className="table__col table__col--1">{isLocalDateNeeded && localDate}</td>
               <td className="table__col table__col--2">{it.isIncome && Number(it.value).toFixed(2)}</td>
               <td className="table__col table__col--3">{!it.isIncome && Number(it.value).toFixed(2)}</td>
-              <td className="table__col table__col--4"><button id={it.id} type="button" className="button button--del" onClick={delButtonClickHandler}><img alt="Удалить запись" src={cross} /></button></td>
+              <td className="table__col table__col--4"><DeleteButton id={it.id} onClick={deleteRecord} /></td>
             </tr>
           );
         })}

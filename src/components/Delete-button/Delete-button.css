@@ -1,0 +1,13 @@
+.button-del {
+    padding: 3px 3px 0 3px;
+    background-color: red;
+    border-radius: 4px;
+}
+
+.button-del:hover, .button-del:active {
+    background-color: #ff5588;
+}
+
+.button-del:active {
+    background-color: #aa5588;
+}
