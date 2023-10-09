@@ -1,0 +1,9 @@
+.footer {
+    padding: 20px 0;
+    background-color: darkslateblue;
+}
+
+.footer__text {
+    color: #fff;
+    margin-bottom: 8px;
+}

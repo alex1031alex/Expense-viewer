@@ -44,7 +44,7 @@ export const fetchRecords = async () => {
   return records;
 }
 
-export const addRecord = async data => {
+export const saveRecordOnServer = async data => {
   const db = getFirestore();
   const stamp = fromStringToTimestamp(data.date);
 
@@ -57,7 +57,7 @@ export const addRecord = async data => {
   }
 };
 
-export const deleteRecord = async id => {
+export const deleteRecordFromServer = async id => {
   const db = getFirestore();
   const ref = doc(db, COLLECTION_NAME, id);
 

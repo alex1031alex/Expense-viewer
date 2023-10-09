@@ -1,13 +1,38 @@
 :root {
     --container-width: 940px;
     --container-padding: 20px;
+    height: 100%;
+}
+
+body {
+    height: 100%;
+}
+
+#root {
+    height: 100%;
+}
+
+.app {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.app__main {
+    flex-grow: 1;
+    flex-shrink: 0;
+}
+
+.app__footer {
+    flex-grow: 0;
+    flex-shrink: 0;
 }
 
 * {
     box-sizing: border-box;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6, p {
     margin: 0;
 }
 
@@ -17,6 +42,11 @@ button {
     background: none;
 }
 
+button:hover, button:active, button:focus {
+    border: none;
+    outline: none;
+}
+
 .container {
     margin: 0 auto;
     max-width: var(--container-width);
@@ -24,28 +54,12 @@ button {
 }
 
 .app__header {
+    margin-top: 10px;
     margin-bottom: 15px;
 }
 
 .main__form {
     margin-bottom: 24px;
-}
-
-.table {
-    border: 1px solid #121212;
-    border-collapse: collapse;
-}
-
-.table__col {
-    border: 1px solid #dcdcdc;
-    padding: 6px 14px;
-    text-align: justify;
-}
-
-.table__footer {
-    font-size: 20px;
-    font-weight: 700;
-    background-color: bisque;
 }
 
 .button {
@@ -66,8 +80,14 @@ button {
     background-color: #aa5588;
 }
 
-.footer {
-    min-height: 80px;
+.button--hide {
+    transform: translateY(2px);
+}
+
+.inverted {
+    transform: rotate(180deg);
+}
+
+.app__footer {
     margin-top: 20px;
-    background-color: darkslateblue;
 }

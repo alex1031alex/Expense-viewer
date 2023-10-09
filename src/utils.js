@@ -31,3 +31,14 @@ export const sortRecordsByDate = (records) => {
     return a.date.seconds - b.date.seconds;
   });
 };
+
+export const getTotal = (records) => {
+  return records.reduce((acc, it) => {
+    if (it.isIncome) {
+      return {...acc, income: acc.income + Number(it.value)}
+    }
+
+    return {...acc, expense: acc.expense + Number(it.value)}
+  }, {income: 0, expense: 0});
+};
+
