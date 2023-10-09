@@ -41,3 +41,4 @@ export const getTotal = (records) => {
     return {...acc, expense: acc.expense + Number(it.value)}
   }, {income: 0, expense: 0});
 };
+
