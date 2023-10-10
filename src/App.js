@@ -8,6 +8,7 @@ import {Form} from "./components/Form/Form";
 import {Detailed} from "./components/Detailed/Detailed";
 import {Daily} from "./components/Daily/Daily";
 import {Monthly} from "./components/Monthly/Monthly";
+import {convertRecordsToClientFormat} from "./utils";
 
 function App() {
   const [records, setRecords] = useState([]);
@@ -15,8 +16,7 @@ function App() {
   useEffect(() => {
     (async () => {
       const fetchedRecords = await fetchRecords();
-      setRecords(fetchedRecords);
-
+      setRecords(convertRecordsToClientFormat(fetchedRecords));
     })();
   }, []);
 

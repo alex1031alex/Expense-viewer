@@ -20,25 +20,36 @@ export const fromTimestampToLocalDate = (rowDate) => {
 
 export const sortRecordsByDate = (records) => {
   return records.slice().sort((a, b) => {
-    if (a.date.seconds === b.date.seconds && a.isIncome === true && b.isIncome === false) {
+
+    const aStamp = fromStringToTimestamp(a.date);
+    const bStamp = fromStringToTimestamp(b.date);
+
+    if (aStamp.seconds === bStamp.seconds && a.isIncome === true && b.isIncome === false) {
       return -1;
     }
 
-    if (a.date.seconds === b.date.seconds && a.isIncome === false && b.isIncome === true) {
+    if (aStamp.seconds === bStamp.seconds && a.isIncome === false && b.isIncome === true) {
       return 1;
     }
 
-    return a.date.seconds - b.date.seconds;
+    return aStamp.seconds - bStamp.seconds;
   });
+};
+
+export const convertRecordToClientFormat = (record) => {
+  return {...record,
+    value: {income: record.isIncome ? record.value : 0, expense: !record.isIncome ? record.value : 0},
+    date: fromTimestampToLocalDate(record.date)
+  };
+};
+
+export const convertRecordsToClientFormat = (records) => {
+  return sortRecordsByDate(records.map(convertRecordToClientFormat));
 };
 
 export const getTotal = (records) => {
   return records.reduce((acc, it) => {
-    if (it.isIncome) {
-      return {...acc, income: acc.income + Number(it.value)}
-    }
-
-    return {...acc, expense: acc.expense + Number(it.value)}
+      return {...acc, income: acc.income + Number(it.value.income), expense: acc.expense + Number(it.value.expense)}
   }, {income: 0, expense: 0});
 };
 
