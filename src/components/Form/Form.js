@@ -2,6 +2,7 @@ import "./Form.css";
 import classNames from "classnames";
 import {useState, useRef} from "react";
 import {saveRecordOnServer} from "../../api";
+import {convertRecordToClientFormat} from "../../utils";
 
 const INITIAL_RECORD = {date: "", value: 0, isIncome: false, category: "other", id: ""};
 
@@ -22,7 +23,7 @@ export const Form = ({className, addNewRecord}) => {
     saveRecordOnServer(newRecord)
       .then((id) => {
         const recordWithId = {...newRecord, id: id}
-        addNewRecord(recordWithId);
+        addNewRecord(convertRecordToClientFormat(recordWithId));
         setCurrentRecord({...currentRecord, id: "", value: 0, isIncome: false, category: "other"});
       });
   };
