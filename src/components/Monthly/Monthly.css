@@ -2,3 +2,16 @@
     font-size: 28px;
     margin-bottom: 16px;
 }
+
+.monthly__table {
+    margin-bottom: 20px;
+}
+
+.chart__title {
+    font-size: 24px;
+    margin-bottom: 12px;
+}
+
+.chart__context {
+    margin-bottom: 20px;
+}
