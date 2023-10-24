@@ -1,11 +1,12 @@
 import "./Table.css";
 import classNames from "classnames";
+import {useDispatch} from "react-redux";
 import angleArrow from "../../icons/angle-arrow.svg";
 import {getTotal} from "../../utils";
 import {DeleteButton} from "../Delete-button/Delete-button";
 import {useState} from "react";
 
-export const Table = ({records, className, isDeleting=false, deleteRecord={function(){}}}) => {
+export const Table = ({records, className, isDeleting=false}) => {
   const [isShown, setIsShown] = useState(false);
 
   const hideButtonClickHandler = () => {
@@ -45,7 +46,7 @@ export const Table = ({records, className, isDeleting=false, deleteRecord={funct
             <td className="table__col table__col--2">{it.value.income !== 0 && new Intl.NumberFormat("ru", {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(it.value.income)}</td>
             <td className="table__col table__col--3">{it.value.expense !== 0 && new Intl.NumberFormat("ru", {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(it.value.expense)}</td>
             <td className="table__col table__col--4"/>
-            {isDeleting && <td className="table__col table__col--5"><DeleteButton id={it.id} onClick={deleteRecord} /></td>}
+            {isDeleting && <td className="table__col table__col--5"><DeleteButton id={it.id} /></td>}
           </tr>
         );
       })}

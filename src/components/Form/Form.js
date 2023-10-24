@@ -1,13 +1,15 @@
 import "./Form.css";
 import classNames from "classnames";
 import {useState, useRef} from "react";
-import {saveRecordOnServer} from "../../api";
+import {useDispatch} from "react-redux";
+import {addRecordThunk} from "../../store/actions";
 import {convertRecordToClientFormat} from "../../utils";
 
 const INITIAL_RECORD = {date: "", value: 0, isIncome: false, category: "other", id: ""};
 
-export const Form = ({className, addNewRecord}) => {
+export const Form = ({className}) => {
   const [currentRecord, setCurrentRecord] = useState(INITIAL_RECORD);
+  const dispatch = useDispatch();
 
   const buttonClickHandler = (evt) => {
     evt.preventDefault();
@@ -19,13 +21,7 @@ export const Form = ({className, addNewRecord}) => {
     }
 
     let newRecord = {...currentRecord, isIncome: evt.currentTarget.dataset.isIncome === "true"};
-
-    saveRecordOnServer(newRecord)
-      .then((id) => {
-        const recordWithId = {...newRecord, id: id}
-        addNewRecord(convertRecordToClientFormat(recordWithId));
-        setCurrentRecord({...currentRecord, id: "", value: 0, isIncome: false, category: "other"});
-      });
+    dispatch(addRecordThunk(newRecord));
   };
 
   const inputRef = useRef(null);
