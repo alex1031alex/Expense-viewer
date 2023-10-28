@@ -26,7 +26,7 @@ export const initializeAPI = () => {
   return app;
 };
 
-export const fetchRecords = async () => {
+export const apiFetchRecords = async () => {
   const db = getFirestore();
   const records = [];
 
@@ -44,7 +44,7 @@ export const fetchRecords = async () => {
   return records;
 }
 
-export const saveRecordOnServer = async data => {
+export const apiAddRecord = async data => {
   const db = getFirestore();
   const stamp = fromStringToTimestamp(data.date);
 
@@ -57,14 +57,13 @@ export const saveRecordOnServer = async data => {
   }
 };
 
-export const deleteRecordFromServer = async id => {
+export const apiDeleteRecord = async id => {
   const db = getFirestore();
   const ref = doc(db, COLLECTION_NAME, id);
 
   try {
     await deleteDoc(ref);
   } catch (error) {
-    console.log("Ошибка удаления");
     return Promise.reject(error);
   }
 };

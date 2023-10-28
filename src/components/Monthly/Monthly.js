@@ -1,24 +1,11 @@
 import "./Monthly.css";
 import {Table} from "../Table/Table";
+import {useSelector} from "react-redux";
+import {getMonthlyRecords} from "../../store/selectors";
 import {LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid} from "recharts";
 
-export const Monthly = ({records}) => {
-  const monthlyRecordsMap = {};
-  records.forEach((it) => {
-    const monthName = new Date(it.date).toLocaleDateString("en-US", {month: "short", year: "numeric"});
-
-    if (!monthlyRecordsMap[monthName]) {
-      monthlyRecordsMap[monthName] = {income: Number(it.value.income), expense: Number(it.value.expense)};
-      return;
-    }
-
-    monthlyRecordsMap[monthName].income += Number(it.value.income);
-    monthlyRecordsMap[monthName].expense += Number(it.value.expense);
-  });
-
-  const monthlyRecords = Object.entries(monthlyRecordsMap).map((it) => {
-    return {date: it[0], value: it[1]};
-  }).slice().sort((a, b) => {return new Date(a.date) - new Date(b.date)});
+export const Monthly = () => {
+  const monthlyRecords = useSelector(getMonthlyRecords);
 
   return (
     <section className="monthly">
