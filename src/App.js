@@ -7,7 +7,7 @@ import {Form} from "./components/Form/Form";
 import {Detailed} from "./components/Detailed/Detailed";
 import {Daily} from "./components/Daily/Daily";
 import {Monthly} from "./components/Monthly/Monthly";
-import {fetchRecordsThunk, deleteRecordThunk} from "./store/actions";
+import {fetchRecordsThunk} from "./store/actions";
 import {getRecords} from "./store/selectors";
 
 function App() {
@@ -25,7 +25,7 @@ function App() {
           <div className="container">
             <Form className="main__form" />
             <div>
-              <Detailed records={records} />
+              <Detailed />
               <Daily records={records} />
               <Monthly records={records} />
             </div>

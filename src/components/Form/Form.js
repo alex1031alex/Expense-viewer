@@ -3,7 +3,6 @@ import classNames from "classnames";
 import {useState, useRef} from "react";
 import {useDispatch} from "react-redux";
 import {addRecordThunk} from "../../store/actions";
-import {convertRecordToClientFormat} from "../../utils";
 
 const INITIAL_RECORD = {date: "", value: 0, isIncome: false, category: "other", id: ""};
 

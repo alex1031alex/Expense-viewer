@@ -1,7 +1,10 @@
 import "./Detailed.css";
 import {Table} from "../Table/Table";
+import {useSelector} from "react-redux";
+import {getRecords} from "../../store/selectors";
 
-export const Detailed = ({records}) => {
+export const Detailed = () => {
+  const records = useSelector(getRecords);
 
   return (
     <section className="detailed">
